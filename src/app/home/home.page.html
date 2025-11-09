@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar class="custom-toolbar">
+    <div class="header-content">
+      <div class="logo">
+        <ion-icon name="book" aria-label="Livros"></ion-icon>
+      </div>
+      <nav>
+       <a href="#"><i class="fa-solid fa-house"></i> Início</a>
+       <a href="#"><i class="fa-solid fa-magnifying-glass"></i> Buscar Livros</a>
+       <a href="#"><i class="fa-solid fa-star"></i>Favoritos</a>
+      </nav>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <div class="search-bar" >
+    <ion-input 
+      [(ngModel)]="query" 
+      placeholder="Pesquisar livros..." 
+      
+      
+    ></ion-input>
+    <button id="search" (click)="search()">Buscar</button>
+  </div>
+
+  <div *ngIf="loading && books.length === 0" class="status-message">Carregando...</div>
+  <div *ngIf="error" class="status-message error">{{ error }}</div>
+  <div *ngIf="!loading && books.length === 0 && query" class="status-message">Nenhum livro encontrado para "{{ query }}".</div>
+
+  <ul *ngIf="!loading && books.length > 0">
+    <li 
+      *ngFor="let book of books" 
+      (click)="openDetails(book)" 
+      class="book-item"
+    >
+      <div class="book-media">
+        <img 
+          [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'" 
+          alt="Capa do livro"
+          onerror="this.onerror=null; this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';"
+        >
+      </div>
+      <div class="book-content">
+        <strong [appHighlight]="query">{{ book.volumeInfo.title | uppercase }}</strong>
+        <small>{{ (book.volumeInfo.authors || []).join(', ') }}</small>
+        <span>{{ book.volumeInfo.description | truncate:100 }}</span>
+      </div>
+    </li>
+  </ul>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="dots" loadingText="Carregando mais..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

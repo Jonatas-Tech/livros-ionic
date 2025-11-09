@@ -1,0 +1,7 @@
+{
+  "name": "livros-ionic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

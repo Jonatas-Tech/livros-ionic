@@ -1,0 +1,217 @@
+// Importa a fonte Poppins
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+// Define a fonte Poppins (pode ser necessário no global.scss também)
+:root {
+  --ion-font-family: 'Poppins', sans-serif;
+}
+
+// Reset básico
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+// Estilo do body (aplicado ao content)
+ion-content {
+  --background: #000;
+  color: #fff;
+}
+
+/* Barra superior (header) - adaptada para ion-toolbar */
+ion-toolbar {
+  --background: #5c6ea0;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px; // Padding movido para o div interno
+  width: 100%;
+}
+
+.logo ion-icon {
+  color: white;
+  font-size: 32px;
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+}
+
+nav a span {
+  margin-left: 5px;
+}
+
+nav ion-icon {
+  color: white;
+  margin-right: 8px;
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+/* Campo de busca */
+.search-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px auto;
+  padding: 0 20px; // Padding para centralizar em telas pequenas
+  max-width: 900px;
+}
+
+.search-bar ion-input {
+  // Ajuste do ion-input para simular o input:
+  width: 80%;
+  max-width: 700px;
+  --padding-start: 20px;
+  --padding-end: 20px;
+  font-size: 20px;
+  --border-radius: 30px;
+  --border-width: 0;
+  --background: #1e1e1e; // Fundo escuro
+  --color: #fff;
+  text-align: center;
+  border: none;
+}
+
+.search-bar button#search { 
+  padding: 10px 16px; 
+  margin-left: 8px; 
+  background: #5c6ea0; 
+  color: white; 
+  border: none; 
+  border-radius: 6px; 
+  cursor: pointer; 
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s, color 0.3s;
+}
+
+.search-bar button#search:hover { 
+  background: white; 
+  color: #5c6ea0;
+}
+
+/* Estilização da Lista (ul/li) com Imagem */
+ul {
+  list-style: none;
+  padding: 0;
+  max-width: 900px;
+  margin: 0 auto 50px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.book-item {
+  display: flex;
+  background-color: #1a1a1a;
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.book-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+}
+
+.book-media {
+  flex-shrink: 0;
+  margin-right: 15px;
+}
+
+.book-media img {
+  width: 100px; // Tamanho ajustado para a lista
+  height: 150px; 
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.book-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.book-content strong {
+  color: #5c6ea0;
+  font-size: 1.1em;
+  margin-bottom: 5px;
+}
+
+.book-content small {
+  color: #ccc;
+  margin-bottom: 10px;
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+.book-content span {
+  color: #aaa;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+/* Mensagens de status */
+.status-message {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 1.1em;
+  color: #aaa;
+}
+
+.status-message.error {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .header-content {
+    flex-direction: column;
+    gap: 10px;
+  }
+  nav {
+    gap: 10px;
+  }
+  .search-bar {
+    flex-direction: column;
+  }
+  .search-bar ion-input {
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  .search-bar button {
+    width: 100%;
+    margin-left: 0;
+  }
+  .book-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .book-media {
+    margin: 0 0 10px 0;
+  }
+  .book-content {
+    width: 100%;
+  }
+}
