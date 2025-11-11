@@ -1,0 +1,161 @@
+// Variáveis (certifique-se de que estão definidas ou copie do seu global.scss)
+$primary-color: #5c6ea0; 
+$background-color: #000;
+$card-background: #1a1a1a; // Um tom um pouco mais claro para as seções, se desejar.
+$text-color: #fff;
+$light-text-color: #ccc;
+$button-background: #5c6ea0; // Cor do botão, pode ser a primária
+$button-text-color: #fff;
+
+ion-header {
+  ion-toolbar {
+    --background: transparent; // Fundo transparente para o header
+    --border-width: 0; // Remove borda
+    --box-shadow: none; // Remove sombra
+    position: absolute; // Posiciona o header absolutamente para que o conteúdo possa ir até o topo
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10; // Garante que o botão de fechar fique por cima
+
+    ion-buttons {
+      padding: 10px; // Padding para o botão de fechar
+    }
+
+    ion-button {
+      color: white; // Cor do ícone de fechar
+      --background-hover: rgba($light-text-color, 0.1); // Leve hover
+      font-size: 1.8rem; // Tamanho do ícone
+    }
+  }
+}
+
+ion-content {
+  --background: black;
+  color: $text-color;
+  padding-top: 50px; // Adiciona um padding no topo para o botão de fechar não sobrepor o conteúdo
+}
+
+.details-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; // Centraliza os itens horizontalmente
+  max-width: 600px; // Limita a largura do conteúdo para um visual mais clean
+  margin: 0 auto;
+  text-align: center; // Centraliza o texto por padrão
+  padding: 0 20px; // Padding nas laterais
+}
+
+.book-cover-section {
+  padding: 20px 0;
+  
+  .book-cover-image {
+    width: 180px; // Tamanho maior para a capa
+    height: 270px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); // Sombra mais proeminente
+    margin-bottom: 20px;
+  }
+
+  .book-title {
+    font-size: 2.2rem; // Título grande e impactante
+    font-weight: bold;
+    color: $text-color;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .book-author {
+    font-size: 1.2rem;
+    color: $light-text-color;
+    margin-bottom: 20px;
+  }
+}
+
+.additional-details-section {
+  background-color: $card-background;
+  width: 100%; // Ocupa a largura total do container
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  text-align: left; // Alinha o texto à esquerda dentro desta seção
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+
+  p {
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    color: $light-text-color;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+    strong {
+      color: $text-color;
+      font-weight: 600;
+      margin-right: 5px;
+    }
+  }
+}
+
+.description-section {
+  background-color: $card-background; // Um fundo levemente diferente, se desejar
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  text-align: left; // Descrição alinhada à esquerda
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+
+  h2 {
+    font-size: 1.5rem;
+    color: $text-color;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 2px solid $primary-color; // Linha de destaque
+    padding-bottom: 5px;
+  }
+
+  p {
+    line-height: 1.6;
+    font-size: 1rem;
+    color: $light-text-color;
+
+    // Reseta estilos para tags HTML que podem vir da descrição da API
+    :not(b, i, em, strong) {
+      max-width: 100%;
+      height: auto;
+      display: block; // Garante que elementos como imagens se ajustem bem
+      margin: 10px 0;
+    }
+  }
+}
+
+.action-button-section {
+  width: 100%;
+  margin-bottom: 30px; // Espaço abaixo do botão
+
+  .buy-button {
+    --background: #5c6ea0;
+    --color: white;
+    --border-radius: 8px;
+    height: 50px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba($button-background, 0.4);
+    transition: background 0.3s ease, transform 0.2s ease;
+
+    &:hover {
+      --background:white;
+      color: #5c6ea0;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.error-message {
+  padding: 20px;
+  font-size: 1.1rem;
+  color: #e74c3c; // Vermelho para mensagens de erro
+  margin-top: 50px;
+}

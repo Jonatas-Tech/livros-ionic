@@ -1,3 +1,55 @@
-<p>
-  details-modal works!
-</p>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="selectedBook?.volumeInfo" class="details-container">
+
+    <div class="book-cover-section">
+      <img 
+        [src]="selectedBook.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/150x225/454545/ffffff?text=Sem+Capa'" 
+        alt="Capa do livro"
+        onerror="this.onerror=null; this.src='https://placehold.co/150x225/454545/ffffff?text=Sem+Capa';"
+        class="book-cover-image"
+      >
+      <h1 class="book-title">{{ selectedBook.volumeInfo.title || 'Título Indisponível' }}</h1>
+      <p class="book-author">
+        Autor(es): {{ (selectedBook.volumeInfo.authors || []).join(', ') || 'N/A' }}
+      </p>
+    </div>
+
+    <div class="additional-details-section">
+      <p *ngIf="selectedBook.volumeInfo.publisher">
+        <strong>Editora:</strong> {{ selectedBook.volumeInfo.publisher }}
+      </p>
+      <p>
+        <strong>Publicação:</strong> {{ (selectedBook.volumeInfo.publishedDate)?.slice(0, 4) ?? 'N/A' }}
+      </p>
+      <p *ngIf="selectedBook.volumeInfo.pageCount">
+        <strong>Páginas:</strong> {{ selectedBook.volumeInfo.pageCount }}
+      </p>
+    </div>
+
+    <div class="description-section">
+      <h2>Descrição</h2>
+      <p [innerHTML]="selectedBook.volumeInfo.description || 'Descrição não disponível.'"></p>
+    </div>
+
+    <div class="action-button-section" *ngIf="selectedBook.volumeInfo.infoLink">
+      <ion-button expand="block" class="buy-button" (click)="openBookLink(selectedBook.volumeInfo.infoLink)">
+        Comprar no Google Books
+      </ion-button>
+    </div>
+
+  </div>
+
+  <div *ngIf="!selectedBook?.volumeInfo" class="error-message ion-text-center">
+    <p>Não foi possível carregar os detalhes do livro.</p>
+  </div>
+</ion-content>

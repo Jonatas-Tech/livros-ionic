@@ -5,9 +5,9 @@
         <ion-icon name="book" aria-label="Livros"></ion-icon>
       </div>
       <nav>
-       <a href="#"><i class="fa-solid fa-house"></i> Início</a>
-       <a href="#"><i class="fa-solid fa-magnifying-glass"></i> Buscar Livros</a>
-       <a href="#"><i class="fa-solid fa-star"></i>Favoritos</a>
+       <a href="#" style="gap: 5px;"><i class="fa-solid fa-house"></i> Início</a>
+       <a href="#" style="gap: 5px;"><i class="fa-solid fa-magnifying-glass"></i> Buscar Livros</a>
+       <a href="#" style="gap: 5px;"><i class="fa-solid fa-star"></i>Favoritos</a>
       </nav>
     </div>
   </ion-toolbar>
@@ -43,10 +43,11 @@
         >
       </div>
       <div class="book-content">
-        <strong [appHighlight]="query">{{ book.volumeInfo.title | uppercase }}</strong>
-        <small>{{ (book.volumeInfo.authors || []).join(', ') }}</small>
-        <span>{{ book.volumeInfo.description | truncate:100 }}</span>
-      </div>
+  <h3 style="color: white;">{{ book.volumeInfo.title }}</h3>
+  <p style="color: white;"><strong>Autor:</strong> {{ (book.volumeInfo.authors || []).join(', ') }}</p>
+  <p style="color: white;"><strong>Descrição:</strong> {{ book.volumeInfo.description | truncate:100 }}</p>
+</div>
+
     </li>
   </ul>
 
@@ -54,3 +55,4 @@
     <ion-infinite-scroll-content loadingSpinner="dots" loadingText="Carregando mais..."></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>
+

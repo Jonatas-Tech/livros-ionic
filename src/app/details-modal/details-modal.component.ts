@@ -5,17 +5,24 @@ import { IonicModule, ModalController } from '@ionic/angular';
 @Component({
   selector: 'app-details-modal',
   templateUrl: './details-modal.component.html',
+  styleUrls: ['./details-modal.component.scss'],
   standalone: true,
   imports: [CommonModule, IonicModule]
 })
 export class DetailsModalComponent {
-  // Recebe o livro do componente pai (HomePage)
   @Input() selectedBook: any;
 
   constructor(private modalCtrl: ModalController) {}
 
-  // Função para fechar o modal
   dismiss() {
     this.modalCtrl.dismiss();
+  }
+
+  // Novo método para abrir o link do livro
+  openBookLink(url: string) {
+    if (url) {
+      window.open(url, '_system'); // Abre o link em um navegador externo no Ionic
+      // Ou window.open(url, '_blank'); para um novo tab no navegador web
+    }
   }
 }

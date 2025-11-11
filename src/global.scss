@@ -148,10 +148,11 @@ ul {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  
 }
 
 .book-content strong {
-  color: #5c6ea0;
+  color: white;
   font-size: 1.1em;
   margin-bottom: 5px;
 }
@@ -215,3 +216,11 @@ ul {
     width: 100%;
   }
 }
+ion-input {
+  --highlight-color-focused: #5c6ea0 !important; /* cor da linha ao focar */
+  --highlight-color-valid: #5c6ea0 !important;
+  --highlight-color-invalid: #e74c3c !important; /* vermelho se quiser indicar erro */
+  --highlight-background: transparent;
+}
+
+
