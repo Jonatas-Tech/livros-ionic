@@ -1,7 +1,7 @@
 // Importa a fonte Poppins
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
-// Define a fonte Poppins (pode ser necessário no global.scss também)
+// Define a fonte Poppins
 :root {
   --ion-font-family: 'Poppins', sans-serif;
 }
@@ -13,13 +13,13 @@
   box-sizing: border-box;
 }
 
-// Estilo do body (aplicado ao content)
+// Estilo do body (aplicado ao ion-content)
 ion-content {
   --background: #000;
   color: #fff;
 }
 
-/* Barra superior (header) - adaptada para ion-toolbar */
+/* Barra superior (header) */
 ion-toolbar {
   --background: #5c6ea0;
 }
@@ -28,7 +28,7 @@ ion-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 30px; // Padding movido para o div interno
+  padding: 10px 30px;
   width: 100%;
 }
 
@@ -49,6 +49,11 @@ nav a {
   margin-left: 20px;
   display: flex;
   align-items: center;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #dcdcdc;
 }
 
 nav a span {
@@ -68,12 +73,11 @@ nav ion-icon {
   justify-content: center;
   align-items: center;
   margin: 30px auto;
-  padding: 0 20px; // Padding para centralizar em telas pequenas
+  padding: 0 20px;
   max-width: 900px;
 }
 
 .search-bar ion-input {
-  // Ajuste do ion-input para simular o input:
   width: 80%;
   max-width: 700px;
   --padding-start: 20px;
@@ -81,37 +85,36 @@ nav ion-icon {
   font-size: 20px;
   --border-radius: 30px;
   --border-width: 0;
-  --background: #1e1e1e; // Fundo escuro
+  --background: #1e1e1e;
   --color: #fff;
   text-align: center;
   border: none;
 }
 
-.search-bar button#search { 
-  padding: 10px 16px; 
-  margin-left: 8px; 
-  background: #5c6ea0; 
-  color: white; 
-  border: none; 
-  border-radius: 6px; 
-  cursor: pointer; 
+.search-bar button#search {
+  padding: 10px 16px;
+  margin-left: 8px;
+  background: #5c6ea0;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
   font-size: 16px;
-  text-decoration: none;
   font-weight: bold;
   transition: background 0.3s, color 0.3s;
 }
 
-.search-bar button#search:hover { 
-  background: white; 
+.search-bar button#search:hover {
+  background: white;
   color: #5c6ea0;
 }
 
-/* Estilização da Lista (ul/li) com Imagem */
-ul {
+/* Lista de livros */
+.book-list {
   list-style: none;
   padding: 0;
   max-width: 900px;
-  margin: 0 auto 50px auto;
+  margin: 0 auto 60px auto;
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -129,7 +132,7 @@ ul {
 
 .book-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6);
 }
 
 .book-media {
@@ -138,8 +141,8 @@ ul {
 }
 
 .book-media img {
-  width: 100px; // Tamanho ajustado para a lista
-  height: 150px; 
+  width: 100px;
+  height: 150px;
   object-fit: cover;
   border-radius: 4px;
 }
@@ -148,26 +151,24 @@ ul {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  
+}
+
+.book-content h3 {
+  color: #fff;
+  margin-bottom: 8px;
+  font-size: 1.2em;
+}
+
+.book-content p {
+  color: #ddd;
+  font-size: 0.95em;
+  margin: 3px 0;
+  line-height: 1.4;
 }
 
 .book-content strong {
-  color: white;
-  font-size: 1.1em;
-  margin-bottom: 5px;
-}
-
-.book-content small {
-  color: #ccc;
-  margin-bottom: 10px;
-  font-style: italic;
-  font-size: 0.9em;
-}
-
-.book-content span {
-  color: #aaa;
-  font-size: 0.9em;
-  line-height: 1.4;
+  color: #fff;
+  font-weight: 700;
 }
 
 /* Mensagens de status */
@@ -183,44 +184,54 @@ ul {
   font-weight: bold;
 }
 
+/* Personalização do foco do ion-input */
+ion-input {
+  --highlight-color-focused: #5c6ea0 !important;
+  --highlight-color-valid: #5c6ea0 !important;
+  --highlight-color-invalid: #e74c3c !important;
+  --highlight-background: transparent;
+}
+
 /* Responsividade */
 @media (max-width: 600px) {
   .header-content {
     flex-direction: column;
     gap: 10px;
   }
+
   nav {
     gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
+
   .search-bar {
     flex-direction: column;
+    align-items: stretch;
   }
+
   .search-bar ion-input {
     width: 100%;
     margin-bottom: 10px;
     text-align: left;
   }
+
   .search-bar button {
     width: 100%;
     margin-left: 0;
   }
+
   .book-item {
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
+
   .book-media {
     margin: 0 0 10px 0;
   }
+
   .book-content {
     width: 100%;
   }
 }
-ion-input {
-  --highlight-color-focused: #5c6ea0 !important; /* cor da linha ao focar */
-  --highlight-color-valid: #5c6ea0 !important;
-  --highlight-color-invalid: #e74c3c !important; /* vermelho se quiser indicar erro */
-  --highlight-background: transparent;
-}
-
-

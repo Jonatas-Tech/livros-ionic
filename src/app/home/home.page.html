@@ -5,54 +5,65 @@
         <ion-icon name="book" aria-label="Livros"></ion-icon>
       </div>
       <nav>
-       <a href="#" style="gap: 5px;"><i class="fa-solid fa-house"></i> Início</a>
-       <a href="#" style="gap: 5px;"><i class="fa-solid fa-magnifying-glass"></i> Buscar Livros</a>
-       <a href="#" style="gap: 5px;"><i class="fa-solid fa-star"></i>Favoritos</a>
+        <a href="#" style="gap: 5px;"><i class="fa-solid fa-house"></i> Início</a>
+        <a href="#" style="gap: 5px;"><i class="fa-solid fa-magnifying-glass"></i> Buscar Livros</a>
+        <a href="#" style="gap: 5px;"><i class="fa-solid fa-star"></i> Favoritos</a>
       </nav>
     </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  
-  <div class="search-bar" >
-    <ion-input 
-      [(ngModel)]="query" 
-      placeholder="Pesquisar livros..." 
-      
-      
+<ion-content [fullscreen]="true" scrollEvents="true">
+  <!-- Barra de busca -->
+  <div class="search-bar">
+    <ion-input
+      [(ngModel)]="query"
+      placeholder="Pesquisar livros..."
+      type="text"
+      clearInput="true"
     ></ion-input>
     <button id="search" (click)="search()">Buscar</button>
   </div>
 
-  <div *ngIf="loading && books.length === 0" class="status-message">Carregando...</div>
-  <div *ngIf="error" class="status-message error">{{ error }}</div>
-  <div *ngIf="!loading && books.length === 0 && query" class="status-message">Nenhum livro encontrado para "{{ query }}".</div>
+  <!-- Mensagens de status -->
+  <div *ngIf="loading && books.length === 0" class="status-message">
+    Carregando...
+  </div>
+  <div *ngIf="error" class="status-message error">
+    {{ error }}
+  </div>
+  <div *ngIf="!loading && books.length === 0 && query" class="status-message">
+    Nenhum livro encontrado para "{{ query }}".
+  </div>
 
-  <ul *ngIf="!loading && books.length > 0">
-    <li 
-      *ngFor="let book of books" 
-      (click)="openDetails(book)" 
+  <!-- Lista de livros -->
+  <ul class="book-list" [hidden]="books.length === 0">
+    <li
+      *ngFor="let book of books; trackBy: trackByBook"
+      (click)="openDetails(book)"
       class="book-item"
     >
       <div class="book-media">
-        <img 
-          [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'" 
+        <img
+          [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'"
           alt="Capa do livro"
           onerror="this.onerror=null; this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';"
-        >
+        />
       </div>
-      <div class="book-content">
-  <h3 style="color: white;">{{ book.volumeInfo.title }}</h3>
-  <p style="color: white;"><strong>Autor:</strong> {{ (book.volumeInfo.authors || []).join(', ') }}</p>
-  <p style="color: white;"><strong>Descrição:</strong> {{ book.volumeInfo.description | truncate:100 }}</p>
-</div>
 
+      <div class="book-content">
+        <h3>{{ book.volumeInfo.title }}</h3>
+        <p><strong>Autor:</strong> {{ (book.volumeInfo.authors || []).join(', ') }}</p>
+        <p><strong>Descrição:</strong> {{ book.volumeInfo.description | truncate: 100 }}</p>
+      </div>
     </li>
   </ul>
 
+  <!-- Scroll infinito -->
   <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
-    <ion-infinite-scroll-content loadingSpinner="dots" loadingText="Carregando mais..."></ion-infinite-scroll-content>
+    <ion-infinite-scroll-content
+      loadingSpinner="dots"
+      loadingText="Carregando mais..."
+    ></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>
-
