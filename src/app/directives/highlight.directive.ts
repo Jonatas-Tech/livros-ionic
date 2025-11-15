@@ -1,7 +1,6 @@
 import { Directive, ElementRef, Input, OnChanges } from '@angular/core';
 
-// Cor de destaque padrão (exemplo: azul claro ou amarelo)
-// Altere este valor!
+
 const HIGHLIGHT_COLOR = '#5c6ea0'; // Exemplo: Amarelo (pode ser qualquer cor hexadecimal, RGB ou nome)
 
 @Directive({

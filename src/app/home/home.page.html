@@ -5,65 +5,180 @@
         <ion-icon name="book" aria-label="Livros"></ion-icon>
       </div>
       <nav>
-        <a href="#" style="gap: 5px;"><i class="fa-solid fa-house"></i> Início</a>
-        <a href="#" style="gap: 5px;"><i class="fa-solid fa-magnifying-glass"></i> Buscar Livros</a>
-        <a href="#" style="gap: 5px;"><i class="fa-solid fa-star"></i> Favoritos</a>
+        <a href="\home" style="gap: 5px;"><i class="fa-solid fa-house"></i> Início</a>
+        <a href="\pesquisa" style="gap: 5px;"><i class="fa-solid fa-magnifying-glass"></i> Buscar Livros</a>
       </nav>
     </div>
   </ion-toolbar>
-</ion-header>
+  </ion-header>
+<ion-content [fullscreen]="true">
+  
+  <header class="hero">
+    <h1>Descubra um novo mundo a cada página!</h1>
+  </header>
 
-<ion-content [fullscreen]="true" scrollEvents="true">
-  <!-- Barra de busca -->
-  <div class="search-bar">
-    <ion-input
-      [(ngModel)]="query"
-      placeholder="Pesquisar livros..."
-      type="text"
-      clearInput="true"
-    ></ion-input>
-    <button id="search" (click)="search()">Buscar</button>
-  </div>
-
-  <!-- Mensagens de status -->
-  <div *ngIf="loading && books.length === 0" class="status-message">
-    Carregando...
-  </div>
   <div *ngIf="error" class="status-message error">
     {{ error }}
   </div>
-  <div *ngIf="!loading && books.length === 0 && query" class="status-message">
-    Nenhum livro encontrado para "{{ query }}".
-  </div>
 
-  <!-- Lista de livros -->
-  <ul class="book-list" [hidden]="books.length === 0">
-    <li
-      *ngFor="let book of books; trackBy: trackByBook"
-      (click)="openDetails(book)"
-      class="book-item"
-    >
-      <div class="book-media">
-        <img
-          [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'"
-          alt="Capa do livro"
-          onerror="this.onerror=null; this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';"
-        />
+  <section class="top10">
+    <h2>TOP - 10</h2>
+    <p>Livros do momento</p>
+    <button>Ver Agora</button> 
+  </section>
+
+  <div class="divider"></div>
+  
+  <section class="book-category">
+    <div class="category-header">
+      <h2>Romance</h2>
+    </div>
+    <div *ngIf="loadingRomance" class="loading-message">Carregando livros de Romance...</div>
+    
+    <div class="books-list-horizontal">
+      <div
+        *ngFor="let book of romanceBooks.slice(0, romanceDisplayCount); trackBy: trackByBook" 
+        (click)="openDetails(book)"
+        class="book-card-horizontal"
+      >
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'" alt="Capa do livro" onerror="this.onerror=null; this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';"/>
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate: 25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate: 30 }}</p>
+        </div>
       </div>
-
-      <div class="book-content">
-        <h3>{{ book.volumeInfo.title }}</h3>
-        <p><strong>Autor:</strong> {{ (book.volumeInfo.authors || []).join(', ') }}</p>
-        <p><strong>Descrição:</strong> {{ book.volumeInfo.description | truncate: 100 }}</p>
+      
+      <div 
+        *ngIf="!loadingRomance && romanceBooks.length > romanceDisplayCount" 
+        (click)="loadMoreBooks('romance')" 
+        class="book-card-horizontal view-more-card"
+      >
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+          <p>Ver Mais Livros</p>
+        </div>
       </div>
-    </li>
-  </ul>
+      
+      <div *ngIf="!loadingRomance && romanceBooks.length === 0" class="status-message no-data">
+        Nenhum livro de Romance encontrado.
+      </div>
+    </div>
+  </section>
+  
+  <div class="divider"></div>
 
-  <!-- Scroll infinito -->
-  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
-    <ion-infinite-scroll-content
-      loadingSpinner="dots"
-      loadingText="Carregando mais..."
-    ></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+  <section class="book-category">
+    <div class="category-header">
+      <h2>Fantasia</h2>
+    </div>
+    <div *ngIf="loadingFantasy" class="loading-message">Carregando livros de Fantasia...</div>
+    
+    <div class="books-list-horizontal">
+      <div
+        *ngFor="let book of fantasyBooks.slice(0, fantasyDisplayCount); trackBy: trackByBook"
+        (click)="openDetails(book)"
+        class="book-card-horizontal"
+      >
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'" alt="Capa do livro" onerror="this.onerror=null; this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';"/>
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate: 25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate: 30 }}</p>
+        </div>
+      </div>
+      
+      <div 
+        *ngIf="!loadingFantasy && fantasyBooks.length > fantasyDisplayCount" 
+        (click)="loadMoreBooks('fantasy')" 
+        class="book-card-horizontal view-more-card"
+      >
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+          <p>Ver Mais Livros</p>
+        </div>
+      </div>
+      
+      <div *ngIf="!loadingFantasy && fantasyBooks.length === 0" class="status-message no-data">
+        Nenhum livro de Fantasia encontrado.
+      </div>
+    </div>
+  </section>
+  
+  <div class="divider"></div>
+  
+  <section class="book-category">
+    <div class="category-header">
+      <h2>Ficção Científica</h2>
+    </div>
+    <div *ngIf="loadingScifi" class="loading-message">Carregando Ficção Científica...</div>
+    
+    <div class="books-list-horizontal">
+      <div
+        *ngFor="let book of scifiBooks.slice(0, scifiDisplayCount); trackBy: trackByBook"
+        (click)="openDetails(book)"
+        class="book-card-horizontal"
+      >
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'" alt="Capa do livro" onerror="this.onerror=null; this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';"/>
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate: 25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate: 30 }}</p>
+        </div>
+      </div>
+      
+      <div 
+        *ngIf="!loadingScifi && scifiBooks.length > scifiDisplayCount" 
+        (click)="loadMoreBooks('scifi')" 
+        class="book-card-horizontal view-more-card"
+      >
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+          <p>Ver Mais Livros</p>
+        </div>
+      </div>
+      
+      <div *ngIf="!loadingScifi && scifiBooks.length === 0" class="status-message no-data">
+        Nenhum livro de Ficção Científica encontrado.
+      </div>
+    </div>
+  </section>
+  
+  <div class="divider"></div>
+
+  <section class="book-category">
+    <div class="category-header">
+      <h2>Thriller</h2>
+    </div>
+    <div *ngIf="loadingThriller" class="loading-message">Carregando Thriller...</div>
+    
+    <div class="books-list-horizontal">
+      <div
+        *ngFor="let book of thrillerBooks.slice(0, thrillerDisplayCount); trackBy: trackByBook"
+        (click)="openDetails(book)"
+        class="book-card-horizontal"
+      >
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'" alt="Capa do livro" onerror="this.onerror=null; this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';"/>
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate: 25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate: 30 }}</p>
+        </div>
+      </div>
+      
+      <div 
+        *ngIf="!loadingThriller && thrillerBooks.length > thrillerDisplayCount" 
+        (click)="loadMoreBooks('thriller')" 
+        class="book-card-horizontal view-more-card"
+      >
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+          <p>Ver Mais Livros</p>
+        </div>
+      </div>
+      
+      <div *ngIf="!loadingThriller && thrillerBooks.length === 0" class="status-message no-data">
+        Nenhum livro de Thriller encontrado.
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-spacer"></div>
+
 </ion-content>

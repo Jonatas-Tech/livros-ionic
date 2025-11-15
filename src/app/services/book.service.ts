@@ -8,7 +8,7 @@ const BASE = 'https://www.googleapis.com/books/v1';
   providedIn: 'root'
 })
 export class BookService {
-  private apiKey: string | null = null; // 'YOUR_API_KEY';
+  private apiKey: string | null = null;
 
   constructor(private http: HttpClient) {}
 

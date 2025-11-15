@@ -24,17 +24,27 @@
       </p>
     </div>
 
-    <div class="additional-details-section">
-      <p *ngIf="selectedBook.volumeInfo.publisher">
-        <strong>Editora:</strong> {{ selectedBook.volumeInfo.publisher }}
-      </p>
-      <p>
-        <strong>Publicação:</strong> {{ (selectedBook.volumeInfo.publishedDate)?.slice(0, 4) ?? 'N/A' }}
-      </p>
-      <p *ngIf="selectedBook.volumeInfo.pageCount">
-        <strong>Páginas:</strong> {{ selectedBook.volumeInfo.pageCount }}
-      </p>
-    </div>
+   <div class="additional-details-section">
+
+  @if (selectedBook?.volumeInfo?.publisher) {<!-- PB -->
+    <p>
+      <strong>Editora:</strong> {{ selectedBook.volumeInfo.publisher }}
+    </p>
+  }
+
+  <p>
+    <strong>Publicação:</strong> <!-- PB -->
+    {{ selectedBook.volumeInfo.publishedDate | date:'yyyy' }}
+  </p>
+
+  @if (selectedBook?.volumeInfo?.pageCount) {<!-- PB -->
+    <p>
+      <strong>Páginas:</strong> {{ selectedBook.volumeInfo.pageCount }}
+    </p>
+  }
+
+</div>
+
 
     <div class="description-section">
       <h2>Descrição</h2>

@@ -1,30 +1,188 @@
-#container {
-  text-align: center;
+// src/app/home/home.page.scss
 
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+// Importa a fonte Poppins
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap');
+
+// Define a fonte Poppins globalmente no Ionic
+:root {
+  --ion-font-family: 'Poppins', sans-serif;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+// Estilo de fundo escuro para a página
+ion-content {
+  --background: #0d0f16;
+  color: white;
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
+/* --- HEADER / TOOLBAR --- */
+ion-toolbar {
+  --background: #5c6ea0; /* Cor do cabeçalho */
+  border-bottom: 1px solid #1f2433;
 }
 
-#container a {
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+  width: 100%;
+}
+
+.logo ion-icon {
+  color: white;
+  font-size: 32px;
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+}
+
+nav a {
+  color: #fff;
   text-decoration: none;
+  font-weight: bold;
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s;
+  font-family: 'Poppins', sans-serif;
 }
-ion-input {
-  --highlight-color-focused: #8a2be2; /* roxo */
+
+nav a:hover {
+  color: #dcdcdc;
+}
+
+nav ion-icon {
+  color: white;
+  margin-right: 8px;
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+/* --- HERO SECTION --- */
+.hero {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+  color: white; 
+}
+
+/* --- TOP 10 SECTION (FIXA E CENTRALIZADA) --- */
+.top10 {
+  background: #1a1f2c; 
+  width: 80%; 
+  margin: 20px auto;
+  padding: 50px;
+  border-radius: 10px;
+  text-align: center; 
+  font-family: 'Poppins', sans-serif;
+}
+
+.top10 h2 {
+  font-size: 60px; 
+  font-weight: 900;
+  color: white;
+}
+
+.top10 p {
+  margin-top: 10px;
+  font-size: 20px;
+  color: #c9c9c9;
+}
+
+.top10 button {
+  margin-top: 25px;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 6px;
+  font-size: 20px;
+  cursor: pointer;
+  background: #6d8fff;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  transition: background 0.3s;
+}
+
+.top10 button:hover {
+    background: #5c6ea0;
+}
+
+/* --- SEÇÕES DE CATEGORIAS (CARROSSEL) --- */
+.book-category {
+    margin: 40px 0;
+    padding: 0 30px; 
+}
+
+.book-category h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Container do Carrossel Horizontal */
+.books-list-horizontal {
+  display: flex;
+  overflow-x: scroll; 
+  padding: 10px 0;
+  gap: 20px;
+  -webkit-overflow-scrolling: touch; 
+}
+
+/* Oculta a barra de rolagem */
+.books-list-horizontal::-webkit-scrollbar {
+  display: none;
+}
+
+.books-list-horizontal {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Card Individual (Item do Carrossel) */
+.book-card-horizontal {
+  flex: 0 0 auto; 
+  width: 140px; 
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.2s;
+}
+
+.book-card-horizontal:hover {
+  transform: scale(1.05);
+}
+
+.book-card-horizontal img {
+  width: 100%;
+  height: 210px; 
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+.book-info h4 {
+  margin: 10px 0 3px 0;
+  font-size: 1em;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: white;
+}
+
+.book-info .author {
+  font-size: 0.8em;
+  color: #b7c8ff; 
+}
+
+/* --- ESTILOS DE STATUS/CARREGAMENTO --- */
+.loading-message, .status-message {
+    color: #c9c9c9;
+    padding: 10px;
+    font-family: 'Poppins', sans-serif;
+    margin-left: 20px;
 }
