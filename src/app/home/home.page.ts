@@ -1,5 +1,3 @@
-// src/app/home/home.page.ts
-
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,7 +5,7 @@ import { IonicModule, IonInfiniteScroll, ModalController, IonContent } from '@io
 import { BookService } from '../services/book.service';
 import { TruncatePipe } from '../pipes/truncate.pipe';
 import { DetailsModalComponent } from '../details-modal/details-modal.component';
-// import { Router } from '@angular/router'; 
+import { RippleEffectDirective } from '../directives/ripple-effect.directive';
 
 @Component({
   selector: 'app-home',
@@ -19,63 +17,133 @@ import { DetailsModalComponent } from '../details-modal/details-modal.component'
     FormsModule,
     IonicModule,
     TruncatePipe,
+    RippleEffectDirective,
+    
   ]
 })
 export class HomePage implements OnInit {
   
   @ViewChild(IonContent) ionContent!: IonContent;
 
-  // Variáveis para as seções da página inicial
+  // ============================
+  //   ARRAYS DOS GÊNEROS
+  // ============================
   top10Books: any[] = [];
+
   romanceBooks: any[] = [];
   fantasyBooks: any[] = [];
-  scifiBooks: any[] = []; 
-  thrillerBooks: any[] = []; 
-  
-  // 🆕 VARIÁVEIS DE CONTROLE DE EXIBIÇÃO
-  private readonly INITIAL_RESULTS = 10;
-  private readonly MAX_INITIAL_RESULTS = 20; // Tenta carregar 20 para ter livros para "Ver Mais"
-  private readonly LOAD_MORE_COUNT = 10;
-  
-  // Rastreia quantos livros estão visíveis (inicia com 10)
-  romanceDisplayCount: number = this.INITIAL_RESULTS;
-  fantasyDisplayCount: number = this.INITIAL_RESULTS;
-  scifiDisplayCount: number = this.INITIAL_RESULTS;
-  thrillerDisplayCount: number = this.INITIAL_RESULTS;
+  scifiBooks: any[] = [];
+  thrillerBooks: any[] = [];
 
-  // Status de carregamento para as seções
+  adventureBooks: any[] = [];
+  horrorBooks: any[] = [];
+  biographyBooks: any[] = [];
+  poetryBooks: any[] = [];
+  historyBooks: any[] = [];
+  kidsBooks: any[] = [];
+
+  mysteryBooks: any[] = [];
+  dramaBooks: any[] = [];
+  classicsBooks: any[] = [];
+  selfhelpBooks: any[] = [];
+  religionBooks: any[] = [];
+  philosophyBooks: any[] = [];
+  mangaBooks: any[] = [];
+  comicsBooks: any[] = [];
+
+  // ============================
+  //   CONTADORES DE EXIBIÇÃO
+  // ============================
+  private readonly INITIAL_RESULTS = 10;
+  private readonly MAX_INITIAL_RESULTS = 20;
+  private readonly LOAD_MORE_COUNT = 10;
+
+  romanceDisplayCount = this.INITIAL_RESULTS;
+  fantasyDisplayCount = this.INITIAL_RESULTS;
+  scifiDisplayCount = this.INITIAL_RESULTS;
+  thrillerDisplayCount = this.INITIAL_RESULTS;
+
+  adventureDisplayCount = this.INITIAL_RESULTS;
+  horrorDisplayCount = this.INITIAL_RESULTS;
+  biographyDisplayCount = this.INITIAL_RESULTS;
+  poetryDisplayCount = this.INITIAL_RESULTS;
+  historyDisplayCount = this.INITIAL_RESULTS;
+  kidsDisplayCount = this.INITIAL_RESULTS;
+
+  mysteryDisplayCount = this.INITIAL_RESULTS;
+  dramaDisplayCount = this.INITIAL_RESULTS;
+  classicsDisplayCount = this.INITIAL_RESULTS;
+  selfhelpDisplayCount = this.INITIAL_RESULTS;
+  religionDisplayCount = this.INITIAL_RESULTS;
+  philosophyDisplayCount = this.INITIAL_RESULTS;
+  mangaDisplayCount = this.INITIAL_RESULTS;
+  comicsDisplayCount = this.INITIAL_RESULTS;
+
+  // ============================
+  //   LOADINGS
+  // ============================
   loadingTop10 = false;
+
   loadingRomance = false;
-  loadingFantasy = false; 
+  loadingFantasy = false;
   loadingScifi = false;
   loadingThriller = false;
-  
+
+  loadingAdventure = false;
+  loadingHorror = false;
+  loadingBiography = false;
+  loadingPoetry = false;
+  loadingHistory = false;
+  loadingKids = false;
+
+  loadingMystery = false;
+  loadingDrama = false;
+  loadingClassics = false;
+  loadingSelfhelp = false;
+  loadingReligion = false;
+  loadingPhilosophy = false;
+  loadingManga = false;
+  loadingComics = false;
+
   error: string | null = null;
-  // private readonly MAX_RESULTS = 10; // Variável substituída por INITIAL_RESULTS/MAX_INITIAL_RESULTS
 
   constructor(
     private bookService: BookService,
     private modalCtrl: ModalController,
-    // private router: Router 
   ) {}
 
   ngOnInit() {
     this.loadTop10();
+
     this.loadRomance();
     this.loadFantasy();
-    this.loadScifi(); 
-    this.loadThriller(); 
-  }
-  
-  // -------------------------------------------------------------------
-  // --- FUNÇÕES DE CARREGAMENTO DE SEÇÕES ---
-  // -------------------------------------------------------------------
+    this.loadScifi();
+    this.loadThriller();
 
+    this.loadAdventure();
+    this.loadHorror();
+    this.loadBiography();
+    this.loadPoetry();
+    this.loadHistory();
+    this.loadKids();
+
+    this.loadMystery();
+    this.loadDrama();
+    this.loadClassics();
+    this.loadSelfhelp();
+    this.loadReligion();
+    this.loadPhilosophy();
+    this.loadManga();
+    this.loadComics();
+  }
+
+  // ============================
+  //   TOP 10
+  // ============================
   loadTop10() {
     this.loadingTop10 = true;
     this.error = null;
-    
-    // Usa o limite original de 10 para o TOP 10
+
     this.bookService.searchBooks('best-seller', this.INITIAL_RESULTS, 0).subscribe({
       next: (res: any) => {
         this.loadingTop10 = false;
@@ -88,16 +156,17 @@ export class HomePage implements OnInit {
       }
     });
   }
-  
-  // Função helper para carregamento (evita repetição)
+
+  // ============================
+  //   FUNÇÃO GENÉRICA
+  // ============================
   private loadCategory(
-    query: string, 
-    loadingVar: 'loadingRomance' | 'loadingFantasy' | 'loadingScifi' | 'loadingThriller',
-    booksArray: 'romanceBooks' | 'fantasyBooks' | 'scifiBooks' | 'thrillerBooks',
+    query: string,
+    loadingVar: string,
+    booksArray: string
   ) {
-    // Carrega um número maior de resultados para permitir o "Ver Mais"
     (this as any)[loadingVar] = true;
-    
+
     this.bookService.searchBooks(query, this.MAX_INITIAL_RESULTS, 0).subscribe({
       next: (res: any) => {
         (this as any)[loadingVar] = false;
@@ -109,64 +178,51 @@ export class HomePage implements OnInit {
       }
     });
   }
-  
-  loadRomance() {
-    this.loadCategory('subject:romance', 'loadingRomance', 'romanceBooks');
+
+  // ============================
+  //   CARREGADORES
+  // ============================
+
+  loadRomance() { this.loadCategory('subject:romance', 'loadingRomance', 'romanceBooks'); }
+  loadFantasy() { this.loadCategory('subject:fantasy', 'loadingFantasy', 'fantasyBooks'); }
+  loadScifi() { this.loadCategory('subject:"Science Fiction"', 'loadingScifi', 'scifiBooks'); }
+  loadThriller() { this.loadCategory('subject:thriller', 'loadingThriller', 'thrillerBooks'); }
+
+  loadAdventure() { this.loadCategory('subject:adventure', 'loadingAdventure', 'adventureBooks'); }
+  loadHorror() { this.loadCategory('subject:horror', 'loadingHorror', 'horrorBooks'); }
+  loadBiography() { this.loadCategory('subject:biography', 'loadingBiography', 'biographyBooks'); }
+  loadPoetry() { this.loadCategory('subject:poetry', 'loadingPoetry', 'poetryBooks'); }
+  loadHistory() { this.loadCategory('subject:history', 'loadingHistory', 'historyBooks'); }
+  loadKids() { this.loadCategory('subject:children', 'loadingKids', 'kidsBooks'); }
+
+  loadMystery() { this.loadCategory('subject:mystery', 'loadingMystery', 'mysteryBooks'); }
+  loadDrama() { this.loadCategory('subject:drama', 'loadingDrama', 'dramaBooks'); }
+  loadClassics() { this.loadCategory('subject:classics', 'loadingClassics', 'classicsBooks'); }
+  loadSelfhelp() { this.loadCategory('subject:self-help', 'loadingSelfhelp', 'selfhelpBooks'); }
+  loadReligion() { this.loadCategory('subject:religion', 'loadingReligion', 'religionBooks'); }
+  loadPhilosophy() { this.loadCategory('subject:philosophy', 'loadingPhilosophy', 'philosophyBooks'); }
+  loadManga() { this.loadCategory('subject:manga', 'loadingManga', 'mangaBooks'); }
+  loadComics() { this.loadCategory('subject:comics', 'loadingComics', 'comicsBooks'); }
+
+  // ============================
+  //   LOAD MORE
+  // ============================
+
+  loadMoreBooks(category: string) {
+    const property = category + 'DisplayCount';
+    (this as any)[property] += this.LOAD_MORE_COUNT;
   }
 
-  loadFantasy() {
-    this.loadCategory('subject:fantasy', 'loadingFantasy', 'fantasyBooks');
-  }
-
-  loadScifi() {
-    this.loadCategory('subject:"Science Fiction"', 'loadingScifi', 'scifiBooks');
-  }
-  
-  loadThriller() {
-    this.loadCategory('subject:thriller', 'loadingThriller', 'thrillerBooks');
-  }
-
-  // -------------------------------------------------------------------
-  // --- FUNÇÕES DE INTERAÇÃO E NAVEGAÇÃO ---
-  // -------------------------------------------------------------------
-
-  /**
-   * 🆕 Expande a lista de livros visíveis na mesma página.
-   * @param category A chave da categoria a ser expandida.
-   */
-  loadMoreBooks(category: 'romance' | 'fantasy' | 'scifi' | 'thriller') {
-    switch (category) {
-      case 'romance':
-        this.romanceDisplayCount += this.LOAD_MORE_COUNT;
-        // Se a lista de livros já estiver completa na memória (MAX_INITIAL_RESULTS = 20),
-        // o *ngFor exibirá até 20. Se não, você precisaria fazer outra chamada de API aqui.
-        break;
-      case 'fantasy':
-        this.fantasyDisplayCount += this.LOAD_MORE_COUNT;
-        break;
-      case 'scifi':
-        this.scifiDisplayCount += this.LOAD_MORE_COUNT;
-        break;
-      case 'thriller':
-        this.thrillerDisplayCount += this.LOAD_MORE_COUNT;
-        break;
-    }
-    console.log(`Exibindo agora até ${category}DisplayCount} livros em ${category}.`);
-  }
-
+  // ============================
+  //   MODAL
+  // ============================
   async openDetails(book: any) {
     const modal = await this.modalCtrl.create({
       component: DetailsModalComponent,
-      componentProps: {
-        'selectedBook': book 
-      }
+      componentProps: { selectedBook: book }
     });
     await modal.present();
   }
-
-  /**
-   * Função que lida com o clique no botão "Ver Agora" do TOP 10.
-   */
 
   trackByBook(index: number, book: any) {
     return book.id || index;

@@ -16,9 +16,8 @@ import { DetailsModalComponent } from '../details-modal/details-modal.component'
     CommonModule,
     FormsModule,
     IonicModule,
-    TruncatePipe, 
-    HighlightDirective,
-    DetailsModalComponent
+    TruncatePipe,
+    
   ]
 })
 export class PesquisaPage implements OnInit { 

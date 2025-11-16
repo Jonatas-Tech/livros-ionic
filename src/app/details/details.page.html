@@ -5,22 +5,46 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div *ngIf="loading">Carregando...</div>
-  <div *ngIf="error">{{ error }}</div>
 
-  <div *ngIf="book">
+  @if (loading) {
+    <div>Carregando...</div>
+  }
+
+  @if (error) {
+    <div>{{ error }}</div>
+  }
+
+  @if (book) {
     <ion-card>
-      <img *ngIf="book.volumeInfo.imageLinks" [src]="book.volumeInfo.imageLinks.large || book.volumeInfo.imageLinks.thumbnail" />
+
+      @if (book.volumeInfo?.imageLinks) {
+        <img
+          [src]="book.volumeInfo.imageLinks.large || book.volumeInfo.imageLinks.thumbnail"
+          alt="Capa do livro"
+        />
+      }
+
       <ion-card-header>
-        <ion-card-title>{{ book.volumeInfo.title }}</ion-card-title>
-        <ion-card-subtitle *ngIf="book.volumeInfo.authors">Por {{ book.volumeInfo.authors.join(', ') }}</ion-card-subtitle>
+        <ion-card-title>
+          {{ book.volumeInfo.title }}
+        </ion-card-title>
+
+        @if (book.volumeInfo?.authors) {
+          <ion-card-subtitle>
+            Por {{ book.volumeInfo.authors.join(', ') }}
+          </ion-card-subtitle>
+        }
       </ion-card-header>
+
       <ion-card-content>
         <p><strong>Publicado em:</strong> {{ book.volumeInfo.publishedDate }}</p>
         <p><strong>Editor:</strong> {{ book.volumeInfo.publisher }}</p>
+
         <p><strong>Descrição:</strong></p>
         <p>{{ book.volumeInfo.description }}</p>
       </ion-card-content>
+
     </ion-card>
-  </div>
+  }
+
 </ion-content>

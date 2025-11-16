@@ -1,5 +1,5 @@
 // src/app/pipes/truncate.pipe.ts
-
+// Pipe para truncar textos longos JM
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({

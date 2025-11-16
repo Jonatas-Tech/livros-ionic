@@ -13,6 +13,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" scrollEvents="true">
+
   <!-- Barra de busca -->
   <div class="search-bar">
     <ion-input
@@ -24,39 +25,51 @@
     <button id="search" (click)="search()">Buscar</button>
   </div>
 
-  <!-- Mensagens de status -->
-  <div *ngIf="loading && books.length === 0" class="status-message">
-    Carregando...
-  </div>
-  <div *ngIf="error" class="status-message error">
-    {{ error }}
-  </div>
-  <div *ngIf="!loading && books.length === 0 && query" class="status-message">
-    Nenhum livro encontrado para "{{ query }}".
-  </div>
+  <!-- MENSAGENS DE STATUS -->
+  @if (loading && books.length === 0) {
+    <div class="status-message">Carregando...</div>
+  }
 
-  <!-- Lista de livros -->
-  <ul class="book-list" [hidden]="books.length === 0">
-    <li
-      *ngFor="let book of books; trackBy: trackByBook"
-      (click)="openDetails(book)"
-      class="book-item"
-    >
-      <div class="book-media">
-        <img
-          [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'"
-          alt="Capa do livro"
-          onerror="this.onerror=null; this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';"
-        />
-      </div>
+  @if (error) {
+    <div class="status-message error">
+      {{ error }}
+    </div>
+  }
 
-      <div class="book-content">
-        <h3>{{ book.volumeInfo.title }}</h3>
-        <p><strong>Autor:</strong> {{ (book.volumeInfo.authors || []).join(', ') }}</p>
-        <p><strong>Descrição:</strong> {{ book.volumeInfo.description | truncate: 100 }}</p>
-      </div>
-    </li>
+  @if (!loading && books.length === 0 && query) {
+    <div class="status-message">
+      Nenhum livro encontrado para "{{ query }}".
+    </div>
+  }
+
+<!-- LISTA DE LIVROS -->
+@if (books.length > 0) {
+  <ul class="book-list">
+
+    @for (book of books; track trackByBook(book, i); let i = $index) {
+      <li (click)="openDetails(book)" class="book-item">
+
+        <div class="book-media">
+          <img
+            [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'"
+            alt="Capa do livro"
+            onerror="this.onerror=null; this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';"
+          />
+        </div>
+
+        <div class="book-content">
+          <h3>{{ book.volumeInfo.title }}</h3>
+          <p><strong>Autor:</strong> {{ (book.volumeInfo.authors || []).join(', ') }}</p>
+          <p><strong>Descrição:</strong> {{ book.volumeInfo.description | truncate: 100 }}</p> <!-- Uso do truncate a pipe personalizada JM -->
+        </div>
+
+      </li>
+    } @empty {
+      <div class="status-message">Nenhum livro encontrado.</div>
+    }
+
   </ul>
+}
 
   <!-- Scroll infinito -->
   <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
@@ -65,4 +78,5 @@
       loadingText="Carregando mais..."
     ></ion-infinite-scroll-content>
   </ion-infinite-scroll>
+
 </ion-content>

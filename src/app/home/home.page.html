@@ -2,7 +2,7 @@
   <ion-toolbar class="custom-toolbar">
     <div class="header-content">
       <div class="logo">
-        <ion-icon name="book" aria-label="Livros"></ion-icon>
+        <ion-icon name="book" aria-label="Livros" ></ion-icon>
       </div>
       <nav>
         <a href="\home" style="gap: 5px;"><i class="fa-solid fa-house"></i> Início</a>
@@ -17,168 +17,701 @@
     <h1>Descubra um novo mundo a cada página!</h1>
   </header>
 
-  <div *ngIf="error" class="status-message error">
-    {{ error }}
+  <div>
+  @if (error) {
+    <div class="status-message error">
+      {{ error }}
+    </div>
+  }
+</div>
+
+<!-- ======================= HERO TOP 10 ======================= -->
+<section class="top10">
+  <h2>NextRead<ion-icon name="book" aria-label="Livros"></ion-icon></h2>
+  <p>Escolha seu gênero favorito e divirta-se!</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================
+=                   LISTA COMPLETA DE GÊNEROS                   =
+=============================================================== -->
+
+<!-- ———————— FUNÇÃO PRONTA PARA GERAR CATEGORIAS ————————
+A estrutura abaixo se repete em todos os gêneros:
+@extends
+@for (book of categoryBooks.slice(...))
+@if (loading)
+@if (empty)
+Esse padrão é mantido em TODAS as categorias abaixo.
+-------------------------------------------------------------- -->
+
+<!-- ======================= ROMANCE ======================= -->
+<section class="book-category" rippleEffect> <!-- Uso da diretriva personalizada JM  -->
+  <div class="category-header"><h2>Romance</h2></div>
+
+  @if (loadingRomance) {
+    <div class="loading-message">Carregando livros de Romance...</div>
+  }
+
+  <div class="books-list-horizontal" >
+
+    @for (book of romanceBooks.slice(0, romanceDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'"
+             onerror="this.onerror=null;this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';">
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p> <!-- Uso do truncate a pipe personalizada JM -->
+        </div>
+      </div>
+    }
+
+    @if (!loadingRomance && romanceBooks.length > romanceDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('romance')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingRomance && romanceBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro de Romance encontrado.</div>
+    }
+
   </div>
+</section>
 
-  <section class="top10">
-    <h2>TOP - 10</h2>
-    <p>Livros do momento</p>
-    <button>Ver Agora</button> 
-  </section>
+<div class="divider"></div>
 
-  <div class="divider"></div>
-  
-  <section class="book-category">
-    <div class="category-header">
-      <h2>Romance</h2>
-    </div>
-    <div *ngIf="loadingRomance" class="loading-message">Carregando livros de Romance...</div>
-    
-    <div class="books-list-horizontal">
-      <div
-        *ngFor="let book of romanceBooks.slice(0, romanceDisplayCount); trackBy: trackByBook" 
-        (click)="openDetails(book)"
-        class="book-card-horizontal"
-      >
-        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'" alt="Capa do livro" onerror="this.onerror=null; this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';"/>
+<!-- ======================= FANTASIA ======================= -->
+<section class="book-category"rippleEffect > <!-- Uso da diretriva personalizada JM  -->
+  <div class="category-header"><h2>Fantasia</h2></div>
+
+  @if (loadingFantasy) {
+    <div class="loading-message">Carregando livros de Fantasia...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of fantasyBooks.slice(0, fantasyDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'"
+             onerror="this.onerror=null;this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';">
         <div class="book-info">
-          <h4>{{ book.volumeInfo.title | truncate: 25 }}</h4>
-          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate: 30 }}</p>
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
         </div>
       </div>
-      
-      <div 
-        *ngIf="!loadingRomance && romanceBooks.length > romanceDisplayCount" 
-        (click)="loadMoreBooks('romance')" 
-        class="book-card-horizontal view-more-card"
-      >
-        <div class="view-more-content">
-          <ion-icon name="arrow-forward-circle-outline"></ion-icon>
-          <p>Ver Mais Livros</p>
-        </div>
-      </div>
-      
-      <div *ngIf="!loadingRomance && romanceBooks.length === 0" class="status-message no-data">
-        Nenhum livro de Romance encontrado.
-      </div>
-    </div>
-  </section>
-  
-  <div class="divider"></div>
+    }
 
-  <section class="book-category">
-    <div class="category-header">
-      <h2>Fantasia</h2>
-    </div>
-    <div *ngIf="loadingFantasy" class="loading-message">Carregando livros de Fantasia...</div>
-    
-    <div class="books-list-horizontal">
-      <div
-        *ngFor="let book of fantasyBooks.slice(0, fantasyDisplayCount); trackBy: trackByBook"
-        (click)="openDetails(book)"
-        class="book-card-horizontal"
-      >
-        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'" alt="Capa do livro" onerror="this.onerror=null; this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';"/>
+    @if (!loadingFantasy && fantasyBooks.length > fantasyDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('fantasy')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingFantasy && fantasyBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro de Fantasia encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= FICÇÃO CIENTÍFICA ======================= -->
+<section class="book-category"rippleEffect > <!-- Uso da diretriva personalizada JM  -->
+  <div class="category-header"><h2>Ficção Científica</h2></div>
+
+  @if (loadingScifi) {
+    <div class="loading-message">Carregando Ficção Científica...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of scifiBooks.slice(0, scifiDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'"
+             onerror="this.onerror=null;this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';">
         <div class="book-info">
-          <h4>{{ book.volumeInfo.title | truncate: 25 }}</h4>
-          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate: 30 }}</p>
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
         </div>
       </div>
-      
-      <div 
-        *ngIf="!loadingFantasy && fantasyBooks.length > fantasyDisplayCount" 
-        (click)="loadMoreBooks('fantasy')" 
-        class="book-card-horizontal view-more-card"
-      >
+    }
+
+    @if (!loadingScifi && scifiBooks.length > scifiDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('scifi')">
         <div class="view-more-content">
-          <ion-icon name="arrow-forward-circle-outline"></ion-icon>
-          <p>Ver Mais Livros</p>
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
         </div>
       </div>
-      
-      <div *ngIf="!loadingFantasy && fantasyBooks.length === 0" class="status-message no-data">
-        Nenhum livro de Fantasia encontrado.
-      </div>
-    </div>
-  </section>
-  
-  <div class="divider"></div>
-  
-  <section class="book-category">
-    <div class="category-header">
-      <h2>Ficção Científica</h2>
-    </div>
-    <div *ngIf="loadingScifi" class="loading-message">Carregando Ficção Científica...</div>
-    
-    <div class="books-list-horizontal">
-      <div
-        *ngFor="let book of scifiBooks.slice(0, scifiDisplayCount); trackBy: trackByBook"
-        (click)="openDetails(book)"
-        class="book-card-horizontal"
-      >
-        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'" alt="Capa do livro" onerror="this.onerror=null; this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';"/>
+    }
+
+    @if (!loadingScifi && scifiBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro de Ficção Científica encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= THRILLER ======================= -->
+<section class="book-category"rippleEffect >
+  <div class="category-header"><h2>Thriller</h2></div>
+
+  @if (loadingThriller) {
+    <div class="loading-message">Carregando Thriller...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of thrillerBooks.slice(0, thrillerDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'"
+             onerror="this.onerror=null;this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';">
         <div class="book-info">
-          <h4>{{ book.volumeInfo.title | truncate: 25 }}</h4>
-          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate: 30 }}</p>
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
         </div>
       </div>
-      
-      <div 
-        *ngIf="!loadingScifi && scifiBooks.length > scifiDisplayCount" 
-        (click)="loadMoreBooks('scifi')" 
-        class="book-card-horizontal view-more-card"
-      >
-        <div class="view-more-content">
-          <ion-icon name="arrow-forward-circle-outline"></ion-icon>
-          <p>Ver Mais Livros</p>
-        </div>
-      </div>
-      
-      <div *ngIf="!loadingScifi && scifiBooks.length === 0" class="status-message no-data">
-        Nenhum livro de Ficção Científica encontrado.
-      </div>
-    </div>
-  </section>
-  
-  <div class="divider"></div>
+    }
 
-  <section class="book-category">
-    <div class="category-header">
-      <h2>Thriller</h2>
-    </div>
-    <div *ngIf="loadingThriller" class="loading-message">Carregando Thriller...</div>
-    
-    <div class="books-list-horizontal">
-      <div
-        *ngFor="let book of thrillerBooks.slice(0, thrillerDisplayCount); trackBy: trackByBook"
-        (click)="openDetails(book)"
-        class="book-card-horizontal"
-      >
-        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'" alt="Capa do livro" onerror="this.onerror=null; this.src='https://placehold.co/128x192/454545/ffffff?text=Sem+Capa';"/>
+    @if (!loadingThriller && thrillerBooks.length > thrillerDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('thriller')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingThriller && thrillerBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro de Thriller encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= AVENTURA ======================= -->
+<section class="book-category"rippleEffect >
+  <div class="category-header"><h2>Aventura</h2></div>
+
+  @if (loadingAdventure) {
+    <div class="loading-message">Carregando Aventura...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of adventureBooks.slice(0, adventureDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'">
         <div class="book-info">
-          <h4>{{ book.volumeInfo.title | truncate: 25 }}</h4>
-          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate: 30 }}</p>
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
         </div>
       </div>
-      
-      <div 
-        *ngIf="!loadingThriller && thrillerBooks.length > thrillerDisplayCount" 
-        (click)="loadMoreBooks('thriller')" 
-        class="book-card-horizontal view-more-card"
-      >
+    }
+
+    @if (!loadingAdventure && adventureBooks.length > adventureDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('adventure')">
         <div class="view-more-content">
-          <ion-icon name="arrow-forward-circle-outline"></ion-icon>
-          <p>Ver Mais Livros</p>
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
         </div>
       </div>
-      
-      <div *ngIf="!loadingThriller && thrillerBooks.length === 0" class="status-message no-data">
-        Nenhum livro de Thriller encontrado.
+    }
+
+    @if (!loadingAdventure && adventureBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro de Aventura encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= TERROR ======================= -->
+<section class="book-category"rippleEffect >
+  <div class="category-header"><h2>Terror</h2></div>
+
+  @if (loadingHorror) {
+    <div class="loading-message">Carregando Terror...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of horrorBooks.slice(0, horrorDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'">
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
+        </div>
       </div>
-    </div>
-  </section>
+    }
 
-  <div class="footer-spacer"></div>
+    @if (!loadingHorror && horrorBooks.length > horrorDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('horror')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
 
-</ion-content>
+    @if (!loadingHorror && horrorBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro de Terror encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= BIOGRAFIA ======================= -->
+<section class="book-category"rippleEffect >
+  <div class="category-header"><h2>Biografia</h2></div>
+
+  @if (loadingBiography) {
+    <div class="loading-message">Carregando Biografia...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of biographyBooks.slice(0, biographyDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'">
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingBiography && biographyBooks.length > biographyDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('biography')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingBiography && biographyBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro de Biografia encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= POESIA ======================= -->
+<section class="book-category"rippleEffect >
+  <div class="category-header"><h2>Poesia</h2></div>
+
+  @if (loadingPoetry) {
+    <div class="loading-message">Carregando Poesia...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of poetryBooks.slice(0, poetryDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'">
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingPoetry && poetryBooks.length > poetryDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('poetry')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingPoetry && poetryBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro de Poesia encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= HISTÓRIA ======================= -->
+<section class="book-category"rippleEffect >
+  <div class="category-header"><h2>História</h2></div>
+
+  @if (loadingHistory) {
+    <div class="loading-message">Carregando História...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of historyBooks.slice(0, historyDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'">
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingHistory && historyBooks.length > historyDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('history')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingHistory && historyBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro de História encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= INFANTIL ======================= -->
+<section class="book-category"rippleEffect >
+  <div class="category-header"><h2>Infantil</h2></div>
+
+  @if (loadingKids) {
+    <div class="loading-message">Carregando Literatura Infantil...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of kidsBooks.slice(0, kidsDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'">
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingKids && kidsBooks.length > kidsDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('kids')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingKids && kidsBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro Infantil encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= MISTÉRIO ======================= -->
+<section class="book-category"rippleEffect >
+  <div class="category-header"><h2>Mistério</h2></div>
+
+  @if (loadingMystery) {
+    <div class="loading-message">Carregando Mistério...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of mysteryBooks.slice(0, mysteryDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'">
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingMystery && mysteryBooks.length > mysteryDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('mystery')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingMystery && mysteryBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro de Mistério encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= DRAMA ======================= -->
+<section class="book-category"rippleEffect >
+  <div class="category-header"><h2>Drama</h2></div>
+
+  @if (loadingDrama) {
+    <div class="loading-message">Carregando Drama...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of dramaBooks.slice(0, dramaDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'">
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingDrama && dramaBooks.length > dramaDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('drama')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingDrama && dramaBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro de Drama encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= CLÁSSICOS ======================= -->
+<section class="book-category"rippleEffect >
+  <div class="category-header"><h2>Clássicos</h2></div>
+
+  @if (loadingClassics) {
+    <div class="loading-message">Carregando Clássicos...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of classicsBooks.slice(0, classicsDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'">
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingClassics && classicsBooks.length > classicsDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('classics')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingClassics && classicsBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro clássico encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= AUTOAJUDA ======================= -->
+<section class="book-category"rippleEffect >
+  <div class="category-header"><h2>Autoajuda</h2></div>
+
+  @if (loadingSelfhelp) {
+    <div class="loading-message">Carregando Autoajuda...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of selfhelpBooks.slice(0, selfhelpDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'">
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingSelfhelp && selfhelpBooks.length > selfhelpDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('selfhelp')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingSelfhelp && selfhelpBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro de Autoajuda encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= RELIGIÃO ======================= -->
+<section class="book-category"rippleEffect >
+  <div class="category-header"><h2>Religião</h2></div>
+
+  @if (loadingReligion) {
+    <div class="loading-message">Carregando Religião...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of religionBooks.slice(0, religionDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'">
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingReligion && religionBooks.length > religionDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('religion')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingReligion && religionBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro religioso encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= FILOSOFIA ======================= -->
+<section class="book-category"rippleEffect >
+  <div class="category-header"><h2>Filosofia</h2></div>
+
+  @if (loadingPhilosophy) {
+    <div class="loading-message">Carregando Filosofia...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of philosophyBooks.slice(0, philosophyDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'">
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingPhilosophy && philosophyBooks.length > philosophyDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('philosophy')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingPhilosophy && philosophyBooks.length === 0) {
+      <div class="status-message no-data">Nenhum livro filosófico encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= MANGÁ ======================= -->
+<section class="book-category"rippleEffect >
+  <div class="category-header"><h2>Mangá</h2></div>
+
+  @if (loadingManga) {
+    <div class="loading-message">Carregando Mangás...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of mangaBooks.slice(0, mangaDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'">
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingManga && mangaBooks.length > mangaDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('manga')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingManga && mangaBooks.length === 0) {
+      <div class="status-message no-data">Nenhum mangá encontrado.</div>
+    }
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ======================= HQ / COMICS ======================= -->
+<section class="book-category"rippleEffect >
+  <div class="category-header"><h2>HQ / Comics</h2></div>
+
+  @if (loadingComics) {
+    <div class="loading-message">Carregando HQs e Comics...</div>
+  }
+
+  <div class="books-list-horizontal">
+
+    @for (book of comicsBooks.slice(0, comicsDisplayCount); track book.volumeInfo?.title) {
+      <div class="book-card-horizontal" (click)="openDetails(book)">
+        <img [src]="book.volumeInfo.imageLinks?.thumbnail || 'https://placehold.co/128x192/454545/ffffff?text=Sem+Capa'">
+        <div class="book-info">
+          <h4>{{ book.volumeInfo.title | truncate:25 }}</h4>
+          <p class="author">{{ (book.volumeInfo.authors || []).join(', ') | truncate:30 }}</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingComics && comicsBooks.length > comicsDisplayCount) {
+      <div class="book-card-horizontal view-more-card" (click)="loadMoreBooks('comics')">
+        <div class="view-more-content">
+          <ion-icon name="arrow-forward-circle-outline"></ion-icon><p>Ver Mais Livros</p>
+        </div>
+      </div>
+    }
+
+    @if (!loadingComics && comicsBooks.length === 0) {
+      <div class="status-message no-data">Nenhuma HQ encontrada.</div>
+    }
+
+  </div>
+</section>
+
+<div class="footer-spacer"></div>

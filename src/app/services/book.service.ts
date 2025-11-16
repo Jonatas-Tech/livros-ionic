@@ -1,3 +1,4 @@
+// UM REQUISITO COMPLETO DO SERVIÇO
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -10,10 +11,10 @@ const BASE = 'https://www.googleapis.com/books/v1';
 export class BookService {
   private apiKey: string | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {} // Uso aplicado Da HttpClient JM
 
   // ✅ CORRIGIDO: Agora aceita 3 argumentos (query, maxResults, startIndex)
-  searchBooks(query: string, maxResults = 20, startIndex = 0): Observable<any> {
+  searchBooks(query: string, maxResults = 20, startIndex = 0): Observable<any> {// USO DO METODO GET JM 
     let params = new HttpParams()
       .set('q', query)
       .set('maxResults', String(maxResults))
@@ -26,7 +27,7 @@ export class BookService {
 
   // pega detalhes por volumeId (GET)
   getBookById(volumeId: string): Observable<any> {
-    let url = `${BASE}/volumes/${encodeURIComponent(volumeId)}`;
+    let url = `${BASE}/volumes/${encodeURIComponent(volumeId)}`; // USO DO METODO GET JM
     if (this.apiKey) url += `?key=${this.apiKey}`;
     return this.http.get(url);
   }

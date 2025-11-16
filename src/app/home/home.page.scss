@@ -86,6 +86,11 @@ nav ion-icon {
   font-weight: 900;
   color: white;
 }
+.top10 ion-icon {
+  vertical-align: middle;
+  margin-left: 10px;
+  color: white;
+}
 
 .top10 p {
   margin-top: 10px;
@@ -185,4 +190,23 @@ nav ion-icon {
     padding: 10px;
     font-family: 'Poppins', sans-serif;
     margin-left: 20px;
+}
+ .pesquisa-button {
+   margin-top: 25px;
+   padding: 12px 28px;
+   border: none;
+   border-radius: 6px;
+   font-size: 20px;
+   cursor: pointer;
+   background: #6d8fff;
+   color: white;
+   font-family: 'Poppins', sans-serif;
+   transition: background 0.3s;
+ }
+ .pesquisa-button a {
+   color: white;
+   text-decoration: none;
+    
+
+
 }
